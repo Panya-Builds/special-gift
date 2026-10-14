@@ -5,6 +5,16 @@ const giftImage = document.getElementById("giftImage");
 const roseRain = document.getElementById("rose-rain");
 const lovePage = document.getElementById("lovePage");
 
+const lockButton = document.getElementById("lockButton");
+const lockImage = document.getElementById("lockImage");
+const lockCaption = document.getElementById("lockCaption");
+const scrollHint = document.getElementById("scrollHint");
+
+const memoryPage = document.getElementById("memoryPage");
+const loadingStage = document.getElementById("loadingStage");
+const memoryGallery = document.getElementById("memoryGallery");
+const galleryLoading = document.getElementById("galleryLoading");
+
 const roseImages = [
   "media/rose-red.png",
   "media/rose-pink.png",
@@ -13,6 +23,7 @@ const roseImages = [
 
 let isOpening = false;
 let transitionStarted = false;
+let lockOpening = false;
 let spawnTimer = null;
 let coverageTimer = null;
 
@@ -24,6 +35,8 @@ let columnWidth = 44;
 
 const rand = (min, max) =>
   Math.random() * (max - min) + min;
+
+/* FIRST SCREEN: ROSE RAIN */
 
 function setupColumns() {
   columnWidth = Math.max(
@@ -48,16 +61,12 @@ function createRose() {
 
   const size = rand(48, 72);
   const screenHeight = window.innerHeight;
-
-  // Choose a column whose rose pile is currently the shortest.
   const shortest = Math.min(...columnHeights);
 
   const candidates = [];
 
   columnHeights.forEach((height, index) => {
-    if (height <= shortest + 14) {
-      candidates.push(index);
-    }
+    if (height <= shortest + 14) candidates.push(index);
   });
 
   const column =
@@ -71,11 +80,9 @@ function createRose() {
     )
   );
 
-  // Work out the final position before the rose starts falling.
   const targetY =
     screenHeight - columnHeights[column] - size;
 
-  // Reserve space for this rose in its column.
   columnHeights[column] += size * 0.58;
 
   const drift = rand(-8, 8);
@@ -83,10 +90,7 @@ function createRose() {
   const duration = rand(0.85, 1.35);
 
   const rose = document.createElement("img");
-
-  rose.src =
-    roseImages[Math.floor(Math.random() * roseImages.length)];
-
+  rose.src = roseImages[Math.floor(Math.random() * roseImages.length)];
   rose.alt = "";
   rose.className = "falling-rose";
   rose.draggable = false;
@@ -101,10 +105,7 @@ function createRose() {
   rose.style.setProperty("--drift", `${drift}px`);
   rose.style.setProperty("--rotation", `${rotation}deg`);
 
-  const item = {
-    element: rose,
-    landed: false
-  };
+  const item = { element: rose, landed: false };
 
   roses.push(item);
   roseRain.appendChild(rose);
@@ -117,13 +118,9 @@ function createRose() {
   rose.addEventListener("animationend", () => {
     if (transitionStarted || !rose.isConnected) return;
 
-    // Keep the rose exactly where the falling animation ended.
     rose.style.left = `${targetX + drift}px`;
     rose.style.top = `${targetY}px`;
-    rose.style.setProperty(
-      "--final-rotation",
-      `${rotation}deg`
-    );
+    rose.style.setProperty("--final-rotation", `${rotation}deg`);
 
     rose.classList.add("settled");
     item.landed = true;
@@ -135,10 +132,7 @@ function createRose() {
 function checkCoverage() {
   if (transitionStarted || columnHeights.length === 0) return;
 
-  const shortestPile = Math.min(...columnHeights);
-
-  // Every column must have a substantial pile before transitioning.
-  if (shortestPile >= window.innerHeight * 0.9) {
+  if (Math.min(...columnHeights) >= window.innerHeight * 0.9) {
     finishRoseTransition();
   }
 }
@@ -147,21 +141,16 @@ function startRoseRain() {
   setupColumns();
   roseRain.classList.add("active");
 
-  // Start with a quick wave of roses.
   for (let i = 0; i < 24; i++) {
     setTimeout(() => {
       if (!transitionStarted) createRose();
     }, i * 55);
   }
 
-  // Keep the rain coming while the piles build up.
   spawnTimer = setInterval(() => {
     if (document.hidden || transitionStarted) return;
 
-    for (let i = 0; i < 4; i++) {
-      createRose();
-    }
-
+    for (let i = 0; i < 4; i++) createRose();
     checkCoverage();
   }, 140);
 
@@ -180,27 +169,19 @@ function finishRoseTransition() {
 
   roses.forEach(item => {
     const rose = item.element;
-
-  
-      if (!rose.isConnected) return;
-
+    if (!rose.isConnected) return;
 
     const rect = rose.getBoundingClientRect();
-
     const direction =
-      rect.left + rect.width / 2 < window.innerWidth / 2
-        ? -1
-        : 1;
+      rect.left + rect.width / 2 < window.innerWidth / 2 ? -1 : 1;
 
     rose.style.animation = "none";
-
     rose.style.transition =
       "transform 1.15s cubic-bezier(0.65, 0, 0.35, 1), opacity 1s ease";
 
     requestAnimationFrame(() => {
       rose.style.transform =
         `translateX(${direction * (window.innerWidth + rect.width)}px) rotate(${rand(-300, 300)}deg)`;
-
       rose.style.opacity = "0";
     });
   });
@@ -210,8 +191,12 @@ function finishRoseTransition() {
     roseRain.replaceChildren();
 
     intro.classList.add("is-hidden");
-    lovePage.classList.add("show-content");
+
+    // Turn the romantic screen into a normal scrollable section.
+    lovePage.classList.add("in-flow", "show-content");
     lovePage.setAttribute("aria-hidden", "false");
+
+    scrollHint.classList.add("hint-visible");
   }, 1250);
 }
 
@@ -220,14 +205,80 @@ giftScene.addEventListener("click", () => {
 
   isOpening = true;
   intro.classList.add("is-opening");
-
   startRoseRain();
 });
 
-window.addEventListener("resize", () => {
-  if (!isOpening) {
-    setupColumns();
+/* LOCK: TILT, OPENED LABEL, THEN NEXT SCREEN */
+
+lockButton.addEventListener("click", async () => {
+  if (lockOpening) return;
+  lockOpening = true;
+
+  lockButton.classList.add("lock-tilting");
+  lockCaption.classList.add("caption-opening");
+  scrollHint.classList.remove("hint-visible");
+
+  await wait(450);
+
+  lockButton.classList.add("lock-disappearing");
+
+  lockCaption.innerHTML =
+    '<span class="opened-label">› Opened</span>';
+
+  lockCaption.classList.add("caption-opened");
+
+  await wait(650);
+
+  lockButton.style.visibility = "hidden";
+  lockCaption.classList.add("caption-disappearing");
+
+  await wait(450);
+
+  memoryPage.classList.add("memory-visible");
+  memoryPage.setAttribute("aria-hidden", "false");
+
+  // Scroll gently to the next full-screen section.
+  memoryPage.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+
+  // Let the rotating rose loader play before showing the photos.
+  await wait(2600);
+
+  loadingStage.classList.add("loader-disappearing");
+
+  await wait(650);
+
+  loadingStage.style.display = "none";
+  memoryGallery.classList.add("gallery-visible");
+  memoryGallery.setAttribute("aria-hidden", "false");
+
+  const photos = [...memoryGallery.querySelectorAll(".memory-photo")];
+
+  for (let i = 0; i < photos.length; i++) {
+    photos[i].classList.add("photo-visible");
+    await wait(380);
   }
+
+});
+
+function wait(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+window.addEventListener("resize", () => {
+  if (!isOpening) setupColumns();
 });
 
 setupColumns();
+
+
+const heartArrowScene = document.getElementById("heartArrowScene");
+
+if (heartArrowScene && memoryGallery) {
+  memoryGallery.addEventListener("click", () => {
+    heartArrowScene.classList.add("heart-scene-visible");
+    heartArrowScene.setAttribute("aria-hidden", "false");
+  });
+}

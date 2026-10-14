@@ -1,10 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#fff1d4">
-
   <title>A Little Surprise ❤️</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,14 +17,8 @@
 
   <!-- First screen -->
   <main class="intro" id="intro">
-
     <div class="gift-scene" id="giftScene">
-      <img
-        src="media/giftbox.png"
-        alt="A special gift"
-        class="gift-image"
-        id="giftImage"
-      >
+      <img src="media/giftbox.png" alt="A special gift" class="gift-image" id="giftImage">
     </div>
 
     <div class="intro-content" id="introContent">
@@ -36,42 +30,159 @@
     <p class="tap-to-open">( Tap to Open )</p>
   </main>
 
-  <!-- Roses are created here -->
+  <!-- Falling roses -->
   <div id="rose-rain" aria-hidden="true"></div>
 
-  <!-- Second screen -->
+  <!-- Romantic page -->
   <main class="love-page" id="lovePage" aria-hidden="true">
-
-    <img
-      src="media/dried-rose.png"
-      alt=""
-      class="dried-rose"
-      id="driedRose"
-    >
+    <img src="media/dried-rose.png" alt="" class="dried-rose" id="driedRose">
 
     <div class="love-content" id="loveContent">
-
       <h2>From me to you.</h2>
+      <p class="love-subtitle">This is how much I love you.</p>
 
-      <p class="love-subtitle">
-        This is how much I love you.
-      </p>
-
-      <img
-        src="media/couple.png"
-        alt="A couple sitting together"
-        class="couple-image"
-        id="coupleImage"
-      >
+      <img src="media/couple.png" alt="A couple sitting together" class="couple-image" id="coupleImage">
 
       <div class="love-symbols" aria-hidden="true">
-        <span>✦</span>
-        <span>♡</span>
-        <span>✦</span>
+        <span>✦</span><span>♡</span><span>✦</span>
       </div>
-
     </div>
   </main>
+
+  <!-- Scrollable message and lock screen -->
+  <section class="story-section" id="storySection">
+    <div class="scroll-hint" id="scrollHint" aria-hidden="true">
+      <span>scroll for a little more</span>
+      <span class="scroll-arrows">↓ <span>›</span></span>
+    </div>
+
+    <article class="message-card">
+      <span class="card-heart heart-one">♥</span>
+      <p>In your <span class="word-smile">smile,</span> I found my <span class="word-peace">peace.</span></p>
+      <p>In your <span class="word-love">love,</span> I found my <span class="word-home">home.</span></p>
+      <span class="card-heart heart-two">♥</span>
+      <span class="card-sparkle sparkle-one">✧</span>
+      <span class="card-sparkle sparkle-two">✧</span>
+    </article>
+
+    <button class="lock-button" id="lockButton" type="button" aria-label="Open the next surprise">
+      <img src="media/lock.png" alt="A little heart lock" id="lockImage">
+    </button>
+
+    <p class="lock-caption" id="lockCaption">
+      <span>tap to open</span>
+    </p>
+  </section>
+
+  <!-- Next screen: rose loading and photographs -->
+  <section class="memory-page" id="memoryPage" aria-hidden="true">
+    <div class="loading-stage" id="loadingStage">
+     
+<div class="orbit-roses" aria-hidden="true">
+  <img src="media/rose-red.png" alt="">
+  <img src="media/rose-pink.png" alt="">
+  <img src="media/rose-white.png" alt="">
+  <img src="media/rose-red.png" alt="">
+  <img src="media/rose-pink.png" alt="">
+  <img src="media/rose-white.png" alt="">
+  <img src="media/rose-red.png" alt="">
+  <img src="media/rose-white.png" alt="">
+</div>
+
+      <p class="loading-label">Loading...</p>
+    </div>
+
+    <div class="memory-gallery" id="memoryGallery" aria-hidden="true">
+      <figure class="memory-photo"><img src="media/photo-1.png" alt="A special memory"></figure>
+      <figure class="memory-photo"><img src="media/photo-2.png" alt="A special memory"></figure>
+      <figure class="memory-photo"><img src="media/photo-3.png" alt="A special memory"></figure>
+      <figure class="memory-photo"><img src="media/photo-4.png" alt="A special memory"></figure>
+      <figure class="memory-photo"><img src="media/photo-5.png" alt="A special memory"></figure>
+      <figure class="memory-photo"><img src="media/photo-6.png" alt="A special memory"></figure>
+    </div>
+
+  </section>
+
+   
+<!-- Heart and Cupid Arrow: Step 1 -->
+<section class="heart-arrow-scene" id="heartArrowScene" aria-label="A little love story">
+
+  <div class="floating-hearts" aria-hidden="true">
+    <span class="tiny-heart heart-a">♡</span>
+    <span class="tiny-heart heart-b">♥</span>
+    <span class="tiny-heart heart-c">♡</span>
+    <span class="tiny-heart heart-d">♥</span>
+    <span class="tiny-heart heart-e">♡</span>
+    <span class="tiny-heart heart-f">♥</span>
+    <span class="tiny-heart heart-g">♡</span>
+    <span class="tiny-heart heart-h">♥</span>
+  </div>
+
+  <div class="heart-glow" aria-hidden="true"></div>
+
+    <h2 class="heart-love-text">Bala Fakt Tujhya Sathi</h2>
+
+  <div class="main-heart-wrap">
+    <svg
+      class="main-heart"
+      viewBox="0 0 200 185"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Pink heart"
+    >
+      <defs>
+        <linearGradient id="heartGradient" x1="0" y1="0" x2="0.85" y2="1">
+          <stop offset="0%" stop-color="#ffb6d2"/>
+          <stop offset="38%" stop-color="#ff76a9"/>
+          <stop offset="72%" stop-color="#ed4f8b"/>
+          <stop offset="100%" stop-color="#c92f6b"/>
+        </linearGradient>
+
+        <linearGradient id="heartShine" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8"/>
+          <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+        </linearGradient>
+
+        <filter id="heartShadow" x="-40%" y="-40%" width="180%" height="190%">
+          <feDropShadow dx="0" dy="9" stdDeviation="8"
+            flood-color="#c43f76" flood-opacity="0.22"/>
+        </filter>
+      </defs>
+
+      <path
+        class="heart-shape"
+        d="M100 168 C84 151 18 106 18 58
+           C18 28 40 12 64 12
+           C82 12 94 23 100 38
+           C106 23 119 12 137 12
+           C161 12 182 29 182 58
+           C182 106 116 151 100 168 Z"
+        fill="url(#heartGradient)"
+        filter="url(#heartShadow)"
+      />
+
+      <path
+        d="M39 53 C40 32 57 25 71 30"
+        fill="none"
+        stroke="url(#heartShine)"
+        stroke-width="8"
+        stroke-linecap="round"
+      />
+
+      <ellipse
+        cx="57"
+        cy="70"
+        rx="15"
+        ry="25"
+        fill="#ffffff"
+        opacity="0.12"
+        transform="rotate(-32 57 70)"
+      />
+    </svg>
+  </div>
+
+</section>
+
 
   <script src="script.js"></script>
 </body>
