@@ -1,16 +1,21 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#fff1d4">
 
   <title>A Little Surprise ❤️</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+  <!-- First screen -->
   <main class="intro" id="intro">
 
     <div class="gift-scene" id="giftScene">
@@ -22,23 +27,52 @@
       >
     </div>
 
-    
-<div class="intro-content" id="introContent">
-  <p class="eyebrow">A LITTLE SURPRISE</p>
+    <div class="intro-content" id="introContent">
+      <p class="eyebrow">A LITTLE SURPRISE</p>
+      <h1>Something Special<br>For You</h1>
+      <p class="subtitle">A little world made just for you ♡</p>
+    </div>
 
-  <h1>Something Special<br>For You</h1>
-
-  <p class="subtitle">
-    A little world made just for you ♡
-  </p>
-</div>
-
-<p class="tap-to-open">( Tap to Open )</p>
-
-
+    <p class="tap-to-open">( Tap to Open )</p>
   </main>
 
+  <!-- Roses are created here -->
   <div id="rose-rain" aria-hidden="true"></div>
+
+  <!-- Second screen -->
+  <main class="love-page" id="lovePage" aria-hidden="true">
+
+    <img
+      src="media/dried-rose.png"
+      alt=""
+      class="dried-rose"
+      id="driedRose"
+    >
+
+    <div class="love-content" id="loveContent">
+
+      <h2>From me to you.</h2>
+
+      <p class="love-subtitle">
+        This is how much I love you.
+      </p>
+
+      <img
+        src="media/couple.png"
+        alt="A couple sitting together"
+        class="couple-image"
+        id="coupleImage"
+      >
+
+      <div class="love-symbols" aria-hidden="true">
+        <span>✦</span>
+        <span>♡</span>
+        <span>✦</span>
+      </div>
+
+    </div>
+  </main>
+
   <script src="script.js"></script>
 </body>
 </html>

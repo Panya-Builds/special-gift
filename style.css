@@ -1,11 +1,9 @@
-
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap');
-
 :root {
-  --background: #fff8f4;
+  --background: #fff1d4;
   --pink: #d889a0;
   --dark-pink: #a95370;
   --text: #624750;
+  --deep-red: #74251f;
 }
 
 * {
@@ -21,21 +19,22 @@ body {
 }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: "DM Sans", sans-serif;
   background: var(--background);
   color: var(--text);
+  overflow-x: hidden;
 }
 
 .intro {
-  position: relative;
-  width: 100%;
-  min-height: 100svh;
+  position: fixed;
+  inset: 0;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
   padding: 30px 20px 70px;
+  overflow: hidden;
 
   background:
     radial-gradient(
@@ -43,7 +42,9 @@ body {
       rgba(255, 226, 233, 0.8),
       transparent 58%
     ),
-    var(--background);
+    #fff8f4;
+
+  transition: opacity 0.5s ease;
 }
 
 .gift-scene {
@@ -53,6 +54,8 @@ body {
   width: min(80vw, 420px);
   margin-bottom: 20px;
   opacity: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   animation: giftAppear 1s ease forwards;
 }
 
@@ -64,9 +67,7 @@ body {
   object-fit: contain;
   user-select: none;
   -webkit-user-drag: none;
-
   animation: gentleFloat 3s ease-in-out infinite;
-  transform-origin: center;
 }
 
 .intro-content {
@@ -84,7 +85,7 @@ body {
 }
 
 h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-weight: 500;
   font-size: clamp(35px, 7vw, 60px);
   line-height: 1.15;
@@ -97,69 +98,203 @@ h1 {
   color: #927681;
 }
 
-.open-button {
-  margin-top: 27px;
-  padding: 15px 27px;
-  min-width: 190px;
-
-  border: 1px solid var(--pink);
-  border-radius: 50px;
-
-  background: var(--pink);
-  color: white;
-
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-
-  cursor: pointer;
-  transition:
-    background 0.3s ease,
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-.open-button span {
-  margin-left: 8px;
-}
-
-.open-button:hover {
-  background: var(--dark-pink);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px #d889a044;
-}
-
-.open-button:focus-visible {
-  outline: 3px solid #a9537080;
-  outline-offset: 4px;
-}
-
-.bottom-note {
-  position: absolute;
-  bottom: 24px;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  color: #b48d9b;
+.tap-to-open {
+  margin-top: 8px;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  color: var(--dark-pink);
+  opacity: 0;
+  animation: contentAppear 0.8s ease 0.5s forwards,
+             tapPulse 1.8s ease-in-out 1.3s infinite;
 }
 
 .intro.is-opening .gift-image {
   animation: giftOpen 0.8s ease forwards;
 }
 
-.intro.is-opening .intro-content {
+.intro.is-opening .intro-content,
+.intro.is-opening .tap-to-open {
   animation: contentDisappear 0.4s ease forwards;
 }
+
+.intro.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+
+
+/* Falling roses */
+
+#rose-rain {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  overflow: hidden;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+#rose-rain.active {
+  visibility: visible;
+}
+
+.falling-rose {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: var(--rose-size);
+  height: auto;
+  opacity: 1;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+  transform: translate3d(0, -110px, 0);
+  animation: roseFall var(--fall-duration) linear forwards;
+}
+
+@keyframes roseFall {
+  from {
+    transform: translate3d(0, -110px, 0) rotate(0deg);
+  }
+
+  to {
+    transform: translate3d(
+      var(--drift),
+      var(--fall-distance),
+      0
+    ) rotate(var(--rotation));
+  }
+}
+
+.falling-rose.settled {
+  animation: none;
+  opacity: 1;
+  transform: rotate(var(--final-rotation));
+  will-change: transform, opacity;
+}
+
+
+/* Final romantic page */
+
+.love-page {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  background:
+    radial-gradient(
+      ellipse at 50% 45%,
+      #fff6df 0%,
+      #fff0cd 70%,
+      #fce8c4 100%
+    );
+}
+
+.love-page.visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+.dried-rose {
+  position: absolute;
+  top: -20px;
+  left: 10px;
+  width: clamp(90px, 28vw, 155px);
+  height: auto;
+  object-fit: contain;
+  opacity: 0;
+  transform: translate(-25px, -35px) scale(0.15);
+  transform-origin: top left;
+  filter: drop-shadow(0 7px 10px rgba(78, 43, 24, 0.16));
+}
+
+.love-page.show-content .dried-rose {
+  animation: roseArrive 1.5s cubic-bezier(0.2, 1.5, 0.45, 1) forwards;
+}
+
+.love-content {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  padding: 0 18px;
+  text-align: center;
+  transform: translateY(-43%);
+}
+
+.love-content h2 {
+  color: var(--deep-red);
+  font-family: "Playfair Display", serif;
+  font-size: clamp(29px, 7vw, 39px);
+  font-style: italic;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.love-subtitle {
+  margin-top: 10px;
+  color: #582b2b;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(14px, 4vw, 19px);
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.couple-image {
+  display: block;
+  width: min(78vw, 320px);
+  max-height: 36svh;
+  height: auto;
+  object-fit: contain;
+  margin: 28px auto 0;
+  opacity: 0;
+  transform: scale(0.15);
+  transform-origin: center;
+  filter: drop-shadow(0 4px 3px rgba(90, 57, 40, 0.08));
+}
+
+.love-symbols {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 17px;
+  margin-top: 24px;
+  color: var(--deep-red);
+  opacity: 0;
+  font-size: 13px;
+}
+
+.love-page.show-content h2 {
+  animation: textReveal 0.8s ease 0.6s forwards;
+}
+
+.love-page.show-content .love-subtitle {
+  animation: textReveal 0.8s ease 0.9s forwards;
+}
+
+.love-page.show-content .couple-image {
+  animation: coupleArrive 1.25s cubic-bezier(0.2, 1.25, 0.4, 1) 0.3s forwards;
+}
+
+.love-page.show-content .love-symbols {
+  animation: textReveal 0.8s ease 1.4s forwards;
+}
+
+/* Animations */
 
 @keyframes giftAppear {
   from {
     opacity: 0;
     transform: translateY(25px) scale(0.96);
   }
-
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -171,7 +306,6 @@ h1 {
     opacity: 0;
     transform: translateY(18px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -179,13 +313,8 @@ h1 {
 }
 
 @keyframes gentleFloat {
-  0%, 100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-7px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
 }
 
 @keyframes giftOpen {
@@ -199,6 +328,65 @@ h1 {
   to {
     opacity: 0;
     transform: translateY(-10px);
+  }
+}
+
+@keyframes tapPulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+
+@keyframes roseArrive {
+  0% {
+    opacity: 0;
+    transform: translate(-25px, -35px) scale(0.15);
+  }
+  65% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1.12);
+  }
+  82% {
+    transform: translate(0, 0) scale(0.94);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes coupleArrive {
+  0% {
+    opacity: 0;
+    transform: scale(0.15);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.07);
+  }
+  85% {
+    transform: scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes textReveal {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -218,94 +406,23 @@ h1 {
   .eyebrow {
     letter-spacing: 3px;
   }
+
+  .love-content {
+    top: 51%;
+    transform: translateY(-43%);
+  }
+
+  .couple-image {
+    width: min(82vw, 310px);
+    max-height: 33svh;
+    margin-top: 25px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
-  }
-}
-
-
-.tap-to-open {
-  margin-top: 8px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  letter-spacing: 1.5px;
-  color: #a95370;
-  opacity: 0.8;
-  animation: tapPulse 1.8s ease-in-out infinite;
-}
-
-.gift-scene {
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-@keyframes tapPulse {
-  0%, 100% {
-    opacity: 0.5;
-    transform: translateY(0);
-  }
-
-  50% {
-    opacity: 1;
-    transform: translateY(-3px);
-  }
-}
-
-
-/* Falling rose effect */
-
-#rose-rain {
-  position: fixed;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 100;
-}
-
-.falling-rose {
-  position: absolute;
-  top: -140px;
-  width: var(--rose-size);
-  height: auto;
-  object-fit: contain;
-  opacity: 0;
-  user-select: none;
-  pointer-events: none;
-  will-change: transform;
-  animation: roseFall var(--fall-duration) linear forwards;
-}
-
-@keyframes roseFall {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, -5vh, 0) rotate(0deg);
-  }
-
-  8% {
-    opacity: 1;
-  }
-
-  85% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0.95;
-    transform:
-      translate3d(var(--drift), 115vh, 0)
-      rotate(var(--rotation));
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .falling-rose {
-    animation-duration: 0.01ms !important;
   }
 }
